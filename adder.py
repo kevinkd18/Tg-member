@@ -11,24 +11,24 @@ import traceback
 import time
 import random
 
-re = "\033[1;31m"
-gr = "\033[1;32m"
-cy = "\033[1;36m"
+re="\033[1;31m"
+gr="\033[1;32m"
+cy="\033[1;36m"
 
-print(re + "╔╦╗┌─┐┬  ┌─┐╔═╗  ╔═╗┌┬┐┌┬┐┌─┐┬─┐")
-print(gr + " ║ ├┤ │  ├┤ ║ ╦  ╠═╣ ││ ││├┤ ├┬┘")
-print(re + " ╩ └─┘┴─┘└─┘╚═╝  ╩ ╩─┴┘─┴┘└─┘┴└─")
+print (re+"╔╦╗┌─┐┬  ┌─┐╔═╗  ╔═╗┌┬┐┌┬┐┌─┐┬─┐")
+print (gr+" ║ ├┤ │  ├┤ ║ ╦  ╠═╣ ││ ││├┤ ├┬┘")
+print (re+" ╩ └─┘┴─┘└─┘╚═╝  ╩ ╩─┴┘─┴┘└─┘┴└─")
 
-print(cy + "version : 1.01")
-print(cy + "Make sure you Subscribed Termux Professor On Youtube")
-print(cy + "www.youtube.com/c/TermuxProfessorYT")
+print (cy+"version : 1.01")
+print (cy+"Make sure you Subscribed Termux Professor On Youtube")
+print (cy+"www.youtube.com/c/TermuxProfessorYT")
 
-print(re + "NOTE :")
-print("1. Telegram only allows adding 200 members in a group by one user.")
-print("2. You can use multiple Telegram accounts to add more members.")
-print("3. Add only 50 members in the group each time, otherwise, you will get a flood error.")
-print("4. Then wait for 15-30 minutes before adding members again.")
-print("5. Make sure you enable 'Add User' permission in your group")
+print (re+"NOTE :")
+print ("1. Telegram only allow to add 200 members in group by one user.")
+print ("2. You can Use multiple Telegram accounts for add more members.")
+print ("3. Add only 50 members in group each time otherwise you will get flood error.")
+print ("4. Then wait for 15-30 miniute then add members again.")
+print ("5. Make sure you enable Add User Permission in your group")
 
 cpass = configparser.RawConfigParser()
 cpass.read('config.data')
@@ -41,7 +41,7 @@ try:
 except KeyError:
     os.system('clear')
     banner()
-    print(re + "[!] run python setup.py first !!\n")
+    print(re+"[!] run python setup.py first !!\n")
     sys.exit(1)
 
 client.connect()
@@ -49,11 +49,11 @@ if not client.is_user_authorized():
     client.send_code_request(phone)
     os.system('clear')
     banner()
-    client.sign_in(phone, input(gr + '[+] Enter the code: ' + re))
+    client.sign_in(phone, input(gr+'[+] Enter the code: '+re))
 
 users = []
-with open(r"members.csv", encoding='UTF-8') as f:  # Enter your file name
-    rows = csv.reader(f, delimiter=",", lineterminator="\n")
+with open(r"members.csv", encoding='UTF-8') as f:  #Enter your file name
+    rows = csv.reader(f,delimiter=",",lineterminator="\n")
     next(rows, None)
     for row in rows:
         user = {}
@@ -84,25 +84,25 @@ for chat in chats:
     except:
         continue
 
-print(gr + 'Choose a group to add members:' + cy)
+print(gr+'Choose a group to add members:'+cy)
 i = 0
 for group in groups:
     print(str(i) + '- ' + group.title)
     i += 1
 
-g_index = input(gr + "Enter a Number: " + re)
+g_index = input(gr+"Enter a Number: "+re)
 target_group = groups[int(g_index)]
 
 target_group_entity = InputPeerChannel(target_group.id, target_group.access_hash)
 
-mode = int(input(gr + "Enter 1 to add by username or 2 to add by ID: " + cy))
+mode = int(input(gr+"Enter 1 to add by username or 2 to add by ID: "+cy))
 
 n = 0
 
 for user in users:
     n += 1
     if n % 80 == 0:
-        time.sleep(60)  # Use time.sleep instead of sleep
+        sleep(60)
     try:
         print("Adding {}".format(user['id']))
         if mode == 1:
