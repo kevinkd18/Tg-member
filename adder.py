@@ -8,24 +8,27 @@ import os
 import sys
 import csv
 import traceback
-import random
 import time
+import random
 
 re = "\033[1;31m"
 gr = "\033[1;32m"
 cy = "\033[1;36m"
 
-def banner():
-    os.system('clear')
-    print(f"""
-    {re}╔╦╗{cy}┌─┐┬  ┌─┐{re}╔═╗  ╔═╗{cy}┌─┐┬─┐┌─┐┌─┐┌─┐┬─┐
-    {re} ║ {cy}├┤ │  ├┤ {re}║ ╦  ╚═╗{cy}│  ├┬┘├─┤├─┘├┤ ├┬┘
-    {re} ╩ {cy}└─┘┴─┘└─┘{re}╚═╝  ╚═╝{cy}└─┘┴└─┴ ┴┴  └─┘┴└─
+print(re + "╔╦╗┌─┐┬  ┌─┐╔═╗  ╔═╗┌┬┐┌┬┐┌─┐┬─┐")
+print(gr + " ║ ├┤ │  ├┤ ║ ╦  ╠═╣ ││ ││├┤ ├┬┘")
+print(re + " ╩ └─┘┴─┘└─┘╚═╝  ╩ ╩─┴┘─┴┘└─┘┴└─")
 
-                   Version: 1.01
-     {re}Subscribe Termux Professor on Youtube
-       {cy}www.youtube.com/c/TermuxProfessorYT
-    """)
+print(cy + "version : 1.01")
+print(cy + "Make sure you Subscribed Termux Professor On Youtube")
+print(cy + "www.youtube.com/c/TermuxProfessorYT")
+
+print(re + "NOTE :")
+print("1. Telegram only allows adding 200 members in a group by one user.")
+print("2. You can use multiple Telegram accounts to add more members.")
+print("3. Add only 50 members in the group each time, otherwise, you will get a flood error.")
+print("4. Then wait for 15-30 minutes before adding members again.")
+print("5. Make sure you enable 'Add User' permission in your group")
 
 cpass = configparser.RawConfigParser()
 cpass.read('config.data')
@@ -38,7 +41,7 @@ try:
 except KeyError:
     os.system('clear')
     banner()
-    print(re + "[!] Run 'python3 setup.py' first!\n")
+    print(re + "[!] run python setup.py first !!\n")
     sys.exit(1)
 
 client.connect()
@@ -49,7 +52,7 @@ if not client.is_user_authorized():
     client.sign_in(phone, input(gr + '[+] Enter the code: ' + re))
 
 users = []
-with open(r"members.csv", encoding='UTF-8') as f:
+with open(r"members.csv", encoding='UTF-8') as f:  # Enter your file name
     rows = csv.reader(f, delimiter=",", lineterminator="\n")
     next(rows, None)
     for row in rows:
@@ -81,10 +84,10 @@ for chat in chats:
     except:
         continue
 
-print(gr + 'Choose a group to add members:')
+print(gr + 'Choose a group to add members:' + cy)
 i = 0
 for group in groups:
-    print(str(i) + ' - ' + group.title)
+    print(str(i) + '- ' + group.title)
     i += 1
 
 g_index = input(gr + "Enter a Number: " + re)
@@ -94,15 +97,12 @@ target_group_entity = InputPeerChannel(target_group.id, target_group.access_hash
 
 mode = int(input(gr + "Enter 1 to add by username or 2 to add by ID: " + cy))
 
-N = 0  # Counter for added members
-SLEEP_INTERVAL = 60  # Time to sleep between adding members (in seconds)
+n = 0
 
 for user in users:
-    N += 1
-    if N % 300 == 0:
-        print(f"Waiting for {SLEEP_INTERVAL} seconds...")
-        time.sleep(SLEEP_INTERVAL)
-
+    n += 1
+    if n % 80 == 0:
+        time.sleep(60)  # Sleep for 60 seconds
     try:
         print("Adding {}".format(user['id']))
         if mode == 1:
@@ -116,14 +116,15 @@ for user in users:
         client(InviteToChannelRequest(target_group_entity, [user_to_add]))
         print("Waiting for 60-180 Seconds...")
         time.sleep(random.randrange(60, 180))
-    except PeerFloodError as e:
-        print(f"Flood error: {e}, waiting for {SLEEP_INTERVAL} seconds...")
-        time.sleep(SLEEP_INTERVAL)
+    except PeerFloodError:
+        print("Getting Flood Error from Telegram. Script is stopping now. Please try again after some time.")
+        print("Waiting {} seconds".format(SLEEP_TIME_2))
+        time.sleep(SLEEP_TIME_2)
     except UserPrivacyRestrictedError:
         print("The user's privacy settings do not allow you to do this. Skipping.")
         print("Waiting for 5 Seconds...")
         time.sleep(random.randrange(0, 5))
-    except Exception as e:
+    except:
         traceback.print_exc()
-        print(f"Unexpected Error: {str(e)}")
+        print("Unexpected Error")
         continue
