@@ -9,6 +9,7 @@ import sys
 import csv
 import traceback
 import random
+import time
 
 re = "\033[1;31m"
 gr = "\033[1;32m"
@@ -93,10 +94,12 @@ target_group_entity = InputPeerChannel(target_group.id, target_group.access_hash
 
 mode = int(input(gr + "Enter 1 to add by username or 2 to add by ID: " + cy))
 
-n = 0
+N = 0  # Counter for added members
+SLEEP_INTERVAL = 60  # Time to sleep between adding members (in seconds)
+
 for user in users:
-    n += 1
-    if n % 300 == 0:
+    N += 1
+    if N % 300 == 0:
         print(f"Waiting for {SLEEP_INTERVAL} seconds...")
         time.sleep(SLEEP_INTERVAL)
 
