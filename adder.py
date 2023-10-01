@@ -8,7 +8,6 @@ import os
 import sys
 import csv
 import traceback
-import time
 import random
 
 re = "\033[1;31m"
@@ -20,7 +19,7 @@ print(gr + " ║ ├┤ │  ├┤ ║ ╦  ╠═╣ ││ ││├┤ ├�
 print(re + " ╩ └─┘┴─┘└─┘╚═╝  ╩ ╩─┴┘─┴┘└─┘┴└─")
 
 print(cy + "version : 1.01")
-print(cy + "Make sure you Subscribed Termux Professor On Youtube")
+print(cy + "Make sure you Subscribed to Termux Professor On YouTube")
 print(cy + "www.youtube.com/c/TermuxProfessorYT")
 
 print(re + "NOTE :")
@@ -28,7 +27,7 @@ print("1. Telegram only allows adding 200 members to a group by one user.")
 print("2. You can use multiple Telegram accounts to add more members.")
 print("3. Add only 50 members to the group each time, otherwise, you will get a flood error.")
 print("4. Then wait for 15-30 minutes before adding members again.")
-print("5. Make sure you enable Add User Permission in your group")
+print("5. Make sure you enable 'Add User' permission in your group")
 
 cpass = configparser.RawConfigParser()
 cpass.read('config.data')
@@ -40,15 +39,13 @@ try:
     client = TelegramClient(phone, api_id, api_hash)
 except KeyError:
     os.system('clear')
-    banner()
-    print(re + "[!] run python setup.py first !!\n")
+    print(re + "[!] Run python setup.py first !!\n")
     sys.exit(1)
 
 client.connect()
 if not client.is_user_authorized():
     client.send_code_request(phone)
     os.system('clear')
-    banner()
     client.sign_in(phone, input(gr + '[+] Enter the code: ' + re))
 
 users = []
@@ -101,8 +98,6 @@ n = 0
 
 for user in users:
     n += 1
-    if n % 80 == 0:
-        time.sleep(60)
     try:
         print("Adding {}".format(user['id']))
         if mode == 1:
@@ -115,14 +110,11 @@ for user in users:
             sys.exit("Invalid Mode Selected. Please Try Again.")
         client(InviteToChannelRequest(target_group_entity, [user_to_add]))
         print("Waiting for 60-180 Seconds...")
-        time.sleep(random.randrange(0, 5))
-    except PeerFloodError:
-        print("Getting Flood Error from telegram. Skipping this user. Please try again after some time.")
-        continue  # Continue to the next user
-    except UserPrivacyRestrictedError:
-        print("The user's privacy settings do not allow you to do this. Skipping this user.")
-        continue  # Continue to the next user
+        time.sleep(random.randrange(60, 180))
+    except (PeerFloodError, UserPrivacyRestrictedError):
+        print("Skipping user due to an error.")
+        continue
     except Exception as e:
         traceback.print_exc()
         print(f"Unexpected Error: {str(e)}")
-        continue  # Continue to the next user
+        continue
